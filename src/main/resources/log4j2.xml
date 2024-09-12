@@ -9,7 +9,8 @@
 
     <Loggers>
         <!-- Ghi log từ ứng dụng của bạn -->
-        <Logger name="org.example" level="info" additivity="false">
+        <!-- Logger này sẽ áp dụng cho tất cả các class trong package com.pj -->
+        <Logger name="com.pj" level="info" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
         <!-- Root logger -->

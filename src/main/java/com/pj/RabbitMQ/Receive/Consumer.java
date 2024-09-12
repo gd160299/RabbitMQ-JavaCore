@@ -5,29 +5,37 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class Consumer {
 
+    private static final Logger logger = LogManager.getLogger(Consumer.class);
+
     private static void receiveMessages(String exchangeName, String queueName, AMQP.BasicProperties props, String routingKey, Map<String, Object> headers) throws Exception {
         Connection connection = ConnectionUtil.getConnection();
         Channel channel = connection.createChannel();
 
+        logger.info("Begin: Declaring exchange: {} and queue: {}", exchangeName, queueName);
         channel.exchangeDeclare(exchangeName, props.getType());
         channel.queueDeclare(queueName, false, false, false, null);
         if (props.getType().equals("headers")) {
             channel.queueBind(queueName, exchangeName, routingKey, headers);
+            logger.info("Binding queue {} to exchange {} with headers: {}", queueName, exchangeName, headers);
         } else {
             channel.queueBind(queueName, exchangeName, routingKey);
+            logger.info("Binding queue {} to exchange {} with routing key: {}", queueName, exchangeName, routingKey);
         }
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-            System.out.println(" [x] Received '" + message + "'");
+            logger.info("Received message: {}", message);
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {});
+        logger.info("End: Consuming messages from queue: {}", queueName);
     }
 
     // Nhận thông điệp với routing key (direct, topic, fanout exchange)

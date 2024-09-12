@@ -4,27 +4,31 @@ import com.pj.Utils.ConnectionUtil;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class Producer {
+    private static final Logger logger = LogManager.getLogger(Producer.class);
 
     private static void sendMessage(String exchangeName, String message, AMQP.BasicProperties props, String routingKey, boolean isPublisherConfirms) throws Exception {
         Connection connection = ConnectionUtil.getConnection();
         try (Channel channel = connection.createChannel()) {
+            logger.info("Begin: Declaring exchange: {}", exchangeName);
             channel.exchangeDeclare(exchangeName, props.getType());
 
             if (isPublisherConfirms) {
                 channel.confirmSelect();
             }
             channel.basicPublish(exchangeName, routingKey, props, message.getBytes(StandardCharsets.UTF_8));
-            System.out.println(" [x] Sent '" + message + "'");
+            logger.info("Message sent: {}", message);
             if (isPublisherConfirms) {
                 if (channel.waitForConfirms()) {
-                    System.out.println(" [x] Message confirmed by RabbitMQ.");
+                    logger.info("Message confirmed by RabbitMQ");
                 } else {
-                    System.out.println(" [x] Message not confirmed.");
+                    logger.error("Message not confirmed by RabbitMQ");
                 }
             }
         }
