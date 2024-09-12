@@ -48,10 +48,10 @@ public class RPCServer {
                 String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
                 int n = Integer.parseInt(message);
 
-                System.out.println(" [.] fib(" + message + ")");
+                System.out.println(String.format(" [.] fib(%s)", message));
                 response += fib(n);
             } catch (RuntimeException e) {
-                System.out.println(" [.] " + e);
+                System.out.println(String.format(" [.] %s", e));
             } finally {
                 channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, response.getBytes(StandardCharsets.UTF_8));
                 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
