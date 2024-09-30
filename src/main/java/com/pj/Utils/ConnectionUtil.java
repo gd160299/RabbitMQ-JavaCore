@@ -1,26 +1,26 @@
 package com.pj.Utils;
 
+import com.pj.Config.RabbitMqConfig;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
+import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeoutException;
+
 public class ConnectionUtil {
-    private ConnectionUtil() {}
+    private static final RabbitMqConfig pool = new RabbitMqConfig(10, "localhost");
 
-    private static class SingletonHelper {
-        private static final Connection connection = createConnection();
+    public static Connection getConnection() throws InterruptedException {
+        return pool.getConnection();
     }
 
-    private static Connection createConnection() {
-        try {
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("localhost");
-            return factory.newConnection();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create RabbitMQ connection", e);
-        }
+    public static void releaseConnection(Connection connection) {
+        pool.releaseConnection(connection);
     }
 
-    public static Connection getConnection() {
-        return SingletonHelper.connection;
+    public static void closePool() {
+        pool.close();
     }
 }

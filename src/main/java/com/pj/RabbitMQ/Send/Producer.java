@@ -15,7 +15,9 @@ public class Producer {
 
     private static void sendMessage(String exchangeName, String message, AMQP.BasicProperties props, String routingKey, boolean isPublisherConfirms) throws Exception {
         Connection connection = ConnectionUtil.getConnection();
-        try (Channel channel = connection.createChannel()) {
+        Channel channel = null;
+        try {
+            channel = connection.createChannel();
             logger.info("Begin: Declaring exchange: {}", exchangeName);
             channel.exchangeDeclare(exchangeName, props.getType());
 
@@ -31,6 +33,11 @@ public class Producer {
                     logger.error("Message not confirmed by RabbitMQ");
                 }
             }
+        } finally {
+            if(channel != null && channel.isOpen()) {
+                channel.close();
+            }
+            ConnectionUtil.releaseConnection(connection);
         }
     }
 

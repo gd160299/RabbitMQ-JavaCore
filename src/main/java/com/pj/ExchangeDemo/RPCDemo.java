@@ -21,8 +21,7 @@ public class RPCDemo {
 
         serverThread.start();
 
-        try {
-            RPCClient rpcClient = new RPCClient();
+        try (RPCClient rpcClient = new RPCClient()) {
             String msg = "30";
             logger.info("Begin: Sending RPC request to server with message: {}", msg);
             String response = rpcClient.call(msg);

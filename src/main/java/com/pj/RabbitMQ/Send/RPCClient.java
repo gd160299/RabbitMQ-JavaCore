@@ -4,6 +4,8 @@ import com.pj.Utils.ConnectionUtil;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,10 +17,11 @@ import java.util.concurrent.TimeoutException;
 
 public class RPCClient implements AutoCloseable {
 
+    private static final Logger log = LoggerFactory.getLogger(RPCClient.class);
     private final Connection connection;
     private final Channel channel;
 
-    public RPCClient() throws IOException {
+    public RPCClient() throws IOException, InterruptedException {
         connection = ConnectionUtil.getConnection();
         channel = connection.createChannel();
     }
@@ -50,7 +53,16 @@ public class RPCClient implements AutoCloseable {
         return result;
     }
 
-    public void close() throws IOException {
-        connection.close();
+    @Override
+    public void close() {
+        try {
+            if (channel != null && channel.isOpen()) {
+                channel.close();
+            }
+        } catch (IOException | TimeoutException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionUtil.releaseConnection(connection);
+        }
     }
 }
