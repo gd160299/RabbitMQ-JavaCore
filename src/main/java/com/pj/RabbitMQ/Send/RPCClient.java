@@ -17,7 +17,7 @@ import java.util.concurrent.TimeoutException;
 
 public class RPCClient implements AutoCloseable {
 
-    private static final Logger log = LoggerFactory.getLogger(RPCClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(RPCClient.class);
     private final Connection connection;
     private final Channel channel;
 
@@ -60,7 +60,7 @@ public class RPCClient implements AutoCloseable {
                 channel.close();
             }
         } catch (IOException | TimeoutException e) {
-            e.printStackTrace();
+            logger.error("Failed to close the channel", e);
         } finally {
             ConnectionUtil.releaseConnection(connection);
         }

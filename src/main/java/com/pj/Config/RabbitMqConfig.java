@@ -19,7 +19,9 @@ public class RabbitMqConfig {
         for (int i = 0; i < maxPoolSize; i++) {
             try {
                 Connection connection = factory.newConnection();
-                pool.offer(connection);
+                if (!pool.offer(connection)) {
+                    throw new RuntimeException("Failed to add RabbitMQ connection to the pool");
+                }
             } catch (IOException | TimeoutException e) {
                 throw new RuntimeException("Failed to create initial RabbitMQ connections", e);
             }
@@ -40,7 +42,9 @@ public class RabbitMqConfig {
 
     public void releaseConnection(Connection connection) {
         if (connection != null && connection.isOpen()) {
-            pool.offer(connection);
+            if (!pool.offer(connection)) {
+                throw new RuntimeException("Failed to add RabbitMQ connection to the pool");
+            }
         }
     }
 
