@@ -1,6 +1,6 @@
-package com.pj.Utils;
+package com.pj.utils;
 
-import com.pj.Config.RabbitMqConfig;
+import com.pj.config.RabbitMqConfig;
 import com.rabbitmq.client.Connection;
 
 public class ConnectionUtil {

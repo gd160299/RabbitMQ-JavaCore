@@ -1,4 +1,4 @@
-package com.pj.Config;
+package com.pj.config;
 
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;

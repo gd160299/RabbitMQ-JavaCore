@@ -1,7 +1,7 @@
-package com.pj.ExchangeDemo;
+package com.pj.exchangeDemo;
 
-import com.pj.RabbitMQ.Receive.Consumer;
-import com.pj.RabbitMQ.Send.Producer;
+import com.pj.rabbitMQ.receive.Consumer;
+import com.pj.rabbitMQ.send.Producer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

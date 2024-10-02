@@ -1,6 +1,6 @@
-package com.pj.RabbitMQ.Receive;
+package com.pj.rabbitMQ.receive;
 
-import com.pj.Utils.ConnectionUtil;
+import com.pj.utils.ConnectionUtil;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

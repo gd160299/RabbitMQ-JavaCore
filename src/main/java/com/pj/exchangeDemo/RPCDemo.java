@@ -1,7 +1,7 @@
-package com.pj.ExchangeDemo;
+package com.pj.exchangeDemo;
 
-import com.pj.RabbitMQ.Receive.RPCServer;
-import com.pj.RabbitMQ.Send.RPCClient;
+import com.pj.rabbitMQ.receive.RPCServer;
+import com.pj.rabbitMQ.send.RPCClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

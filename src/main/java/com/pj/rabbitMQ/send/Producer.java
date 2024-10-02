@@ -1,6 +1,6 @@
-package com.pj.RabbitMQ.Send;
+package com.pj.rabbitMQ.send;
 
-import com.pj.Utils.ConnectionUtil;
+import com.pj.utils.ConnectionUtil;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
